@@ -1,0 +1,314 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace MysteryOfTheDottopus
+
+{
+    class Program
+    {
+        static string currentLocation = "";
+        static List<string> inventory = new List<string>();
+        static bool hasDottopus = false;
+
+        static void Main(string[] args)
+        {
+            MainMenu();
+        }
+
+        static void MainMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("Welcome to Mystery of the Dottopus!");
+            Console.WriteLine("1. New Game");
+            Console.WriteLine("2. Load Game");
+            Console.WriteLine("3. Exit");
+
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    StartGame();
+                    break;
+                case "2":
+                    LoadGame();
+                    break;
+                case "3":
+                    Environment.Exit(0);
+                    break;
+                default:
+                    Console.WriteLine("Invalid option. Try again.");
+                    MainMenu();
+                    break;
+            }
+        }
+
+        static void StartGame()
+        {
+            currentLocation = "Security Point";
+            inventory.Clear();
+            hasDottopus = false;
+            Console.WriteLine("Your adventure begins at the Security Point...");
+            Console.ReadKey();
+            GameLoop();
+        }
+
+        static void GameLoop()
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine($"You are at: {currentLocation}");
+
+                switch (currentLocation)
+                {
+                    case "Security Point":
+                        SecurityPoint();
+                        break;
+                    case "Game Design Studio":
+                        GameDesignStudio();
+                        break;
+                    case "Library":
+                        Library();
+                        break;
+                    case "Social Area":
+                        SocialArea();
+                        break;
+                    default:
+                        Console.WriteLine("Invalid location. Returning to the main menu.");
+                        MainMenu();
+                        break;
+                }
+            }
+        }
+
+        static void SecurityPoint()
+        {
+            Console.WriteLine("You stand at the entrance of the school, blocked by a security officer.");
+            Console.WriteLine("1. Show your student ID.");
+            Console.WriteLine("2. Try to talk your way in.");
+            Console.WriteLine("3. Move to Game Design Studio.");
+            Console.WriteLine("4. Save the game.");
+            Console.WriteLine("5. Exit to Main Menu.");
+
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    if (inventory.Contains("Student ID"))
+                    {
+                        Console.WriteLine("The officer lets you through!");
+                        currentLocation = "Game Design Studio";
+                    }
+                    else
+                    {
+                        Console.WriteLine("You need a student ID to enter.");
+                    }
+                    break;
+                case "2":
+                    Console.WriteLine("The officer remains unconvinced.");
+                    break;
+                case "3":
+                    currentLocation = "Game Design Studio";
+                    break;
+                case "4":
+                    SaveGame();
+                    break;
+                case "5":
+                    MainMenu();
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Try again.");
+                    break;
+            }
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
+        }
+
+        static void GameDesignStudio()
+        {
+            Console.WriteLine("You enter the game design studio.");
+            Console.WriteLine("1. Talk to your classmate.");
+            Console.WriteLine("2. Search the desk for clues.");
+            Console.WriteLine("3. Move to Library.");
+            Console.WriteLine("4. Save the game.");
+            Console.WriteLine("5. Exit to Main Menu.");
+
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    Console.WriteLine("Your classmate says: 'Look in the library for more information about the Dottopus.'");
+                    break;
+                case "2":
+                    if (!inventory.Contains("Student ID"))
+                    {
+                        Console.WriteLine("You find a student ID card on the desk!");
+                        inventory.Add("Student ID");
+                    }
+                    break;
+                case "3":
+                    currentLocation = "Library";
+                    break;
+                case "4":
+                    SaveGame();
+                    break;
+                case "5":
+                    MainMenu();
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Try again.");
+                    break;
+            }
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
+        }
+
+        static void Library()
+        {
+            Console.WriteLine("The library is quiet, filled with dusty books.");
+            Console.WriteLine("1. Search for books on hidden Dottopus.");
+            Console.WriteLine("2. Speak with the librarian.");
+            Console.WriteLine("3. Move to Social Area.");
+            Console.WriteLine("4. Save the game.");
+            Console.WriteLine("5. Exit to Main Menu.");
+
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    if (!hasDottopus)
+                    {
+                        Console.WriteLine("You find an old book detailing the mysterious Dottopus!");
+                        Console.WriteLine("As you read, you discover the location of the Dottopus.");
+                        Console.WriteLine("You head deeper into the library and find the Dottopus hidden in a box.");
+                        inventory.Add("Dottopus");
+                        hasDottopus = true;
+                    }
+                    break;
+                case "2":
+                    Console.WriteLine("The librarian mentions: 'The Dottopus is said to reveal its true power at the Social Area.'");
+                    break;
+                case "3":
+                    currentLocation = "Social Area";
+                    break;
+                case "4":
+                    SaveGame();
+                    break;
+                case "5":
+                    MainMenu();
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Try again.");
+                    break;
+            }
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
+        }
+
+        static void SocialArea()
+        {
+            Console.WriteLine("The social area is lively, but you have a task ahead.");
+            Console.WriteLine("1. Use the Dottopus you found.");
+            Console.WriteLine("2. Ask around for more information.");
+            Console.WriteLine("3. Move back to Security Point.");
+            Console.WriteLine("4. Save the game.");
+            Console.WriteLine("5. Exit to Main Menu.");
+
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    if (hasDottopus)
+                    {
+                        Console.WriteLine("The Dottopus glows brightly! You've unlocked the true secret of the school.");
+                        EndGame();
+                    }
+                    else
+                    {
+                        Console.WriteLine("You don't have the Dottopus yet.");
+                    }
+                    break;
+                case "2":
+                    Console.WriteLine("You ask around, but no one knows more than what you’ve already learned.");
+                    break;
+                case "3":
+                    currentLocation = "Security Point";
+                    break;
+                case "4":
+                    SaveGame();
+                    break;
+                case "5":
+                    MainMenu();
+                    break;
+                default:
+                    Console.WriteLine("Invalid choice. Try again.");
+                    break;
+            }
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
+        }
+
+        static void LoadGame()
+        {
+            if (File.Exists("savefile.txt"))
+            {
+                try
+                {
+                    using (StreamReader reader = new StreamReader("savefile.txt"))
+                    {
+                        currentLocation = reader.ReadLine();
+                        hasDottopus = bool.Parse(reader.ReadLine());
+                        inventory = new List<string>(reader.ReadLine().Split(','));
+                    }
+                    Console.WriteLine("Game loaded successfully!");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error loading game: {ex.Message}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("No save file found. Starting a new game.");
+                StartGame();
+            }
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
+        }
+
+        static void SaveGame()
+        {
+            try
+            {
+                using (StreamWriter writer = new StreamWriter("savefile.txt"))
+                {
+                    writer.WriteLine(currentLocation);
+                    writer.WriteLine(hasDottopus);
+                    writer.WriteLine(string.Join(",", inventory));
+                }
+                Console.WriteLine("Game saved successfully!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving game: {ex.Message}");
+            }
+            Console.WriteLine("Press any key to continue.");
+            Console.ReadKey();
+        }
+
+        static void EndGame()
+        {
+            Console.Clear();
+            Console.WriteLine("Congratulations!");
+            Console.WriteLine("You've unlocked the school's secret and revealed its mysteries.");
+            Console.WriteLine("After you used the Dottopus, it turned into a real octopus.");
+            Console.WriteLine("And turns out he has been held captive by the school for a very long time.");
+            Console.WriteLine("He thanks you and returns to his home, to his kids.");
+            Console.WriteLine("Summary of your adventure:");
+            foreach (var item in inventory)
+            {
+                Console.WriteLine($"  * {item}");
+            }
+            Console.WriteLine("\nThanks for playing School of Shadows!");
+            Console.WriteLine("Press any key to return to the main menu.");
+            Console.ReadKey();
+            MainMenu();
+        }
+    }
+}
